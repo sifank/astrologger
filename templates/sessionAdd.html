@@ -1,0 +1,149 @@
+<html lang="en">
+<head>
+    <meta cahrset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="/static/favicon.ico">
+    <title>Add Session</title>
+</head>
+<body>
+    <!--
+    envInfo structure:
+    0 - GPSfix
+    1 - Local time
+    2 - UTC time
+    3 - Latitude
+    4 - Longitude
+    5 - Altitude
+    6 - Evening Twilight
+    7 - Morning Twilight
+    8 - Moon rise
+    9 - Moon set
+    10 - Moon percent
+    -->
+    
+	<form method="POST" action="/addok">
+	<table>
+    <tr><th colspan="6"><h2 style="text-align: center;"><span style="background-color: deepskyblue;">Add Session</span></h2></th></tr>
+	<tr>
+
+	</tr><tr>
+	<th>GPSfix</th>
+	<th>GPS Time</th>
+	<th>UTC</th>
+	<th>Longitude</th>
+	<th>Latitude</th>
+	<th>Altitude</th>
+	</tr><tr>
+	<td>{{ envInfo[0]  }}</td>
+	<td><input type="text" name="dtDate" value="{{ envInfo[1] }}"></td>
+	<td>{{ envInfo[2]}}</td>
+	<td><input type="text" name="Longitude" value="{{ envInfo[4] }}"></td>
+	<td><input type="text" name="Latitude" value="{{ envInfo[3] }}"></td>
+	<td><input type="text" name="Altitude" value="{{ envInfo[5] }}"></td></tr>
+
+	</tr><tr>
+	<th>Evening Twilight</th>
+	<th>Morning Twilight</th>
+	<th>Moon Rise</th>
+	<th>Moon Set</th>
+	<th>Moon Percent</th>
+	</tr><tr>
+	<td>{{ envInfo[6] }}</td>
+	<td>{{ envInfo[7] }}</td>
+	<td>{{ envInfo[8] }}</td>
+	<td>{{ envInfo[9] }}</td>
+	<td>{{ envInfo[10] }}</td>
+	</tr>
+	
+	<td><label>Location Name:</label></td>
+			<td colspan="2"><input type="text" name="Name" required></td>
+
+	<tr><td ><label>Date:</label></td>
+			<td colspan="2"><input type="text" name="Date" value={{ ctime }} required></td></tr>
+
+	<tr>
+        <td><label>OTA:</label></td>
+                <td><select name='OTA' id='OTA'>
+                {% for item in OTAItems %}
+                        <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+                </select></td>
+
+        <td><label>Focuser:</label></td>
+                <td><select name='Focuser' id='Focuser'>
+                {% for item in FocuserItems %}
+                        <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+                </select></td>
+
+        <td><label>Reducer:</label></td>
+                <td><select name='Reducer' id='Reducer'>
+                {% for item in ReducerItems %}
+                        <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+                </select></td>
+
+        </tr><tr>
+
+        <td><label>Mount:</label></td>
+                <td><select name='Mount' id='Mount'>
+                {% for item in MountItems %}
+                        <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+                </select></td>
+
+        <td><label>Guider:</label></td>
+                <td><select name='Guider' id='Guider'>
+                {% for item in GuiderItems %}
+                        <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+                </select></td>
+
+        <td><label>Rotator:</label></td>
+                <td><select name='Rotator' id='Rotator'>
+                {% for item in RotatorItems %}
+                        <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+                </select></td>
+
+        </tr><tr>
+
+        <td><label>Camera:</label></td>
+                <td><select name='Camera' id='Camera'>
+                {% for item in CameraItems %}
+                        <option value="{{ item }}">{{ item }}</option>
+                        {% endfor %}
+                </select></td>
+
+        <td><label>Controller:</label></td>
+                <td><select name='Controller' id='Controller'>
+                {% for item in ControllerItems %}
+                        <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+                </select></td>
+
+        <td><label>Filter:</label></td>
+                <td><select name='Filter' id='Filter'>
+                {% for item in FilterItems %}
+                        <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+                </select></td>
+
+                </tr>
+	</table>
+        
+        <label>Objectives:</label><br>
+			<textarea id="Objectives" name="Objectives" rows="5" cols="50"></textarea><br>
+        <label>Notes:</label><br>
+			<textarea id="Notes" name="Notes" rows="5" cols="50"></textarea><br>
+    
+		<input type="submit" name="action" value="Add Session">
+        <input type="submit" name="action" value="Cancel" formnovalidate>
+    </form>   
+
+
+</body>
+</html>
+

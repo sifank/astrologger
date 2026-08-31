@@ -1,0 +1,137 @@
+<html lang="en">
+<head>
+    <meta cahrset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="/static/favicon.ico">
+    <title>Session Details</title>
+</head>
+<body>
+    <table>
+    <tr><th colspan="5"><h2 style="text-align: center;"><span style="background-color: deepskyblue;">Session Details</span></h2></th></tr>
+	<tr>
+	<th>Location</th>
+	<th>Date</th>
+	<th>Longitude</th>
+	<th>Latitude</th>
+	<th>Altitude</th>
+	</tr><tr>
+	<td>{{ Session[3] }}</td>
+	<td>{{ Session[1] }}</td>
+	<td>{{ Session[4] }}</td>
+	<td>{{ Session[5] }}</td>
+	<td>{{ Session[6] }}</td>
+	</tr><tr>
+
+	<th>Evening Twilight</th>
+	<th>Morning Twilight</th>
+	<th>Moon Rise</th>
+	<th>Moon Set</th>
+	<th>Moon Percent</th>
+	</tr><tr>
+	<td>{{ envInfo[6] }}</td>
+	<td>{{ envInfo[7] }}</td>
+	<td>{{ envInfo[8] }}</td>
+	<td>{{ envInfo[9] }}</td>
+	<td>{{ envInfo[10] }}</td>
+
+	</tr><tr>
+
+	<th>OTA</th>
+	<th>Mount</th>
+	<th>Camera</th>
+	<th>Reducer</th>
+	<th>Controller</th>
+    </tr><tr>
+	<td>{{ Session[9] }}</td>
+	<td>{{ Session[11] }}</td>
+	<td>{{ Session[17] }}</td>
+	<td>{{ Session[10] }}</td>
+	<td>{{ Session[12] }}</td>
+
+	</tr><tr>
+
+	<th>Focuser</th>
+	<th>Guider</th>
+	<th>Filter</th>
+	<th>Rotator</th>
+	<th>UTC</th>
+    </tr><tr>
+	<td>{{ Session[13] }}</td>
+	<td>{{ Session[15] }}</td>
+	<td>{{ Session[16] }}</td>
+	<td>{{ Session[14] }}</td>
+	<td>{{ Session[2] }}</td>
+
+    </tr><tr>
+		<th colspan="3">Objective</th>
+		<th colspan="3">Notes</th>
+		</tr><tr>
+        <td colspan="3"><textarea readonly class="text-box">{{ Session[7] }}</textarea></td>
+        <td colspan="3"><textarea readonly class="text-box">{{ Session[8] }}</textarea></td>
+		</tr>
+    </table>
+
+	<table style="short-table">
+    <tr>
+    <form method="POST" action="/modify">
+        <td><input type="submit" value="Modify"></td>
+        <input type="hidden" name="ID" value= "{{ ID }}">
+    </form>
+
+    <form method="POST" action="/removeok" onsubmit="return ConfirmDelete();">
+        <td><input type="submit" value="Remove"></td>
+        <input type="hidden" name="ID" value= "{{ ID }}">
+    </form>
+
+    <form method="POST" action="/refresh">
+        <td><input type="submit" name="action" value="Back"></td>
+    </form>
+
+    </tr></table>
+
+    <!--- Display targets in this session -->
+    <table><tr>
+    <th>Targets in this session:</th>
+    <th>Name:</th>
+    <th>Common Name:</th>
+    <th>Type:</th>
+    <th>Number Images:</th>
+    <th>Duration:</th>
+    <th>Gain:</th>
+    <th>Binning:</th>
+    </tr>
+     {% for row in Targets %}
+    <tr> <!-- FIXME does not work -->
+		<td><input type="hidden" id="ID" name="ID" value="{{ row[0] }}">
+		<a href="http://depoe:5002/details" class = "button">Target Details</a></td>
+        <!-- <td><form method='Post' action="/details">
+            <button type="submit">Details</button> -->
+        </form></td>
+	<td>{{ row[1] }}</td>
+	<td>{{ row[2] }}</td>
+	<td>{{ row[3] }}</td>
+	<td>{{ row[7] }}</td>
+	<td>{{ row[8] }}</td>
+	<td>{{ row[9] }}</td>
+	<td>{{ row[11] }}</td>
+    </tr>
+    {% endfor %}
+   </table>
+
+
+    <script>
+    function ConfirmDelete() {
+		var confirmation = confirm("Are you sure you want to permanently remove this record?");
+		if (confirmation) {
+			return true; // Proceed with form submission
+		} else {
+			return false; // Stop form submission
+		}
+    }
+    </script>
+
+</body>
+</html>
+

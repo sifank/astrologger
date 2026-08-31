@@ -1,0 +1,60 @@
+<html lang="en">
+<head>
+    <meta cahrset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="/static/favicon.ico">
+    <title>Add Target</title>
+</head>
+<body>
+	<form method="POST" action="/addok">   
+    <table> 
+    <tr><th colspan="5"><h2 style="text-align: center;"><span style="background-color: deepskyblue;">Add Target</span></h2></th></tr>
+	<tr><td><label>Target:</label></td> 
+		<td><input type="text" name="Target" required></td></tr>
+	<tr><td><label>Common Name:</label></td> 
+		<td><input type="text" name="CommonName"></td></tr>
+	<tr><td><label>Image Type:</label></td>
+		<td><select name='ImageType' id='ImageType'>
+		{% for item in ExpType %}
+			<option value="{{ item }}">{{ item }}</option>
+		{% endfor %}
+	<tr><td><label>Session:</label></td>
+		<td><input type="text" name="SessionID" value="{{ SesID }}"}></td></tr>
+	<tr><td><label>Date:</label></td> 
+		<td><input type="text" name="Date" value="{{ ctime }}"></td></tr>
+	<tr><td><label>Number of Images:</label></td> 
+		<td><input type="text" name="NumImages" required></td></tr>
+	<tr><td><label>Duration:</label></td>
+		<td><input type="text" name="Duration" required></td></tr>
+	<tr><td><label>Gain:</label></td> 
+		<td><input type="text" name="Gain" value="210" required></td></tr>
+	<tr><td><label>Offset:</label></td> 
+		<td><input type="text" name="Offset" value="10" required></td></tr>
+	<tr><td><label>Binning:</label></td>
+		<td><select name='Binning' id='Binning'>
+		{% for item in binningItems %}
+			<option value="{{ item }}">{{ item }}</option>
+		{% endfor %}
+		</select>
+	</td></tr>
+	<tr><td><label>Camera Temp:</label></td> <td>
+		<input type="text" name="CamTemp" Required value="0"></td></tr>
+	</table>
+	
+	<label>Weather:</label><br>
+			<textarea class="weather-box" id="Weather" name="Weather">{{ weather }}</textarea><br>
+	<label>Notes:</label><br>
+			<textarea id="Notes" name="Notes" rows="5" cols="50"></textarea><br>
+	<label>Post Proc:</label><br>
+			<textarea id="PostProc" name="PostProc" rows="5" cols="50"></textarea><br>
+    
+	<input type="submit" name="action" value="Add Target">
+	<input type="submit" name="action" value="Cancel" formnovalidate>
+    </form>   
+
+
+</body>
+</html>
+

@@ -1,0 +1,137 @@
+<html lang="en">
+<head>
+    <meta cahrset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="/static/favicon.ico">
+    <title>Modify Session</title>
+</head>
+<body>
+	<form method="POST" action="/modifyok">
+    <table>
+    <tr><th colspan="5"><h2 style="text-align: center;"><span style="background-color: deepskyblue;">Modify Session</span></h2></th></tr>
+
+	<tr>
+        <th>Date/Time</th>
+        <th>Longitude</th>
+        <th>Latitude</th>
+        <th>Altitude</th>
+	</tr><tr>
+        <td><input type="text" name="dtDate" value="{{ Session[2] }}"></td>
+        <td><input type="text" name="Longitude" value="{{ Session[4] }}"></td>
+        <td><input type="text" name="Latitude" value="{{ Session[5] }}"></td>
+	<td><input type="text" name="Altitude" value="{{ Session[6] }}"></td>
+
+    </tr><tr>
+
+        <td><label>OTA:</label></td>
+            <td><select name='OTA'>
+            <option value="{{ Session[9] }}" selected disabled hidden>{{ Session[9] }}</option>
+            {% for item in OTAItems %}
+			<option value="{{ item }}" {% if value== Session[9] %} selected {% endif %}>{{ item }}</option>
+            {% endfor %}
+            </select></td>
+
+        <td><label>Controller:</label></td>
+            <td><select name='Controller'>
+            <option value="{{ Session[12]  }}" selected disabled hidden>{{ Session[12]  }}</option>
+            {% for item in ControllerItems %}
+			<option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+            </select></td>
+
+        </tr><tr>
+
+        <td><label>Mount:</label></td>
+            <td><select name='Mount'>
+            <option value="{{ Session[11]   }}" selected disabled hidden>{{ Session[11]  }}</option>
+            {% for item in MountItems %}
+			<option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+            </select></td>
+
+        <td><label>Reducer:</label></td>
+                <td><select name='Reducer'>
+                <option value="{{ Session[10] }}" selected disabled hidden>{{ Session[10] }}</option>
+                {% for item in ReducerItems %}
+                        <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+                </select></td>
+
+        </tr><tr>
+
+        <td><label>Camera:</label></td>
+                <td><select name='Camera'>
+                <option value="{{ Session[17] }}" selected disabled hidden>{{ Session[17] }}</option>
+                {% for item in CameraItems %}
+                        <option value="{{ item }}">{{ item }}</option>
+                        {% endfor %}
+                </select></td>
+
+            <td><label>Rotator:</label></td>
+                <td><select name='Rotator'>
+                <option value="{{ Session[14] }}" selected disabled hidden>{{ Session[14] }}</option>
+                {% for item in RotatorItems %}
+                        <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+                </select></td>
+
+        </tr><tr>
+
+            <td><label>Focuser:</label></td>
+                <td><select name='Focuser'>
+                <option value="{{ Session[13] }}" selected disabled hidden>{{ Session[13] }}</option>
+                {% for item in FocuserItems %}
+                        <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+                </select></td>
+
+            <td><label>Filter:</label></td>
+                <td><select name='Filter'>
+                <option value="{{ Session[16] }}" selected disabled hidden>{{ Session[16] }}</option>
+                {% for item in FilterItems %}
+                        <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+                </select></td>
+
+        </tr><tr>
+
+            <td><label>Guider:</label></td>
+                <td><select name='Guider'>
+                <option value="{{ Session[15] }}" selected disabled hidden>{{ Session[15] }}</option>
+                {% for item in GuiderItems %}
+                        <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+                </select></td>
+
+	</tr><tr>
+	<td><label>Location Name:</label></td>
+        <td colspan="2"><input type="text" name="Name" value="{{Session[3]}}" required></td>
+	<tr><td ><label>Date:</label></td>
+        <td><input type="text" name="Date" value="{{ Session[1] }}" required></td>
+	</tr>
+	</table>
+
+	<label>Objectives:</label><br>
+        <textarea id="Objectives" name="Objectives" rows="5" cols="50"  value="{{Session[7]}}" >{{ Session[7] }}</textarea><br>
+    <label>Notes:</label><br>
+        <textarea id="Notes" name="Notes" rows="5" cols="50" value="{{Session[8]}}" >{{ Session[8] }}</textarea><br>
+
+
+        <input type="submit" name="action" value="Submit">
+        <input type="submit" name="action" value="Cancel" formnovalidate>
+        <input type="hidden" name="ID" value= "{{ ID }}">
+        <!-- <button onclick="displayAlert()">Show OTA</button> -->
+    </form>   
+
+    <script>
+        function displayAlert() {
+            var selectedValue = document.getElementByName("OTA").value;
+            alert("OTA Value: " + selectedValue);
+        }
+    </script>
+
+</body>
+</html>
+

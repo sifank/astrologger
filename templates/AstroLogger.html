@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="/static/favicon.ico">
+    <title>AstroLogger</title>
+</head>
+
+<html lang="en">
+<head>
+    <title>KOBS AstroLogger</title>
+</head>
+<body>
+   <table>
+    <tr class="notrborder"><th colspan="6"><h2 style="text-align: center;"><span style="background-color: deepskyblue;">KOBS AstroLogger</span></h2></th></tr>
+    <tr class="notr noborder"></tr>
+    <tr class="notr noborder"></tr>
+    </table>
+
+    <textarea style="font-size: 16px" readonlyrows="3" cols="60">
+Create a Session for each observing night,
+then create a Target for each observation
+Use the links below to add or manage these:
+    </textarea><br>
+
+    <br>
+    
+    <a href="http://depoe:5001" class = "button">Manage Session</a>
+    <a href="http://depoe:5002" class = "button">Manage Targets</a> <br><br>
+
+    <br><br>
+
+    <textarea style="font-size: 14px" readonly rows="5" cols="65">
+Suggested startup:
+- Use KSTARs to command scope to north star
+- Use Laser to move mount to north star
+- Use KSTARs plate solve to north pole, moving mount
+- Use KSTARs do a 10 0r 20 star mount model
+- Use KSTARs do a focus adviser
+    </textarea><br>
+</body>
+</html>
+

@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+    <meta cahrset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="/static/favicon.ico">
+    <title>Modify Target</title>
+</head>
+<body>
+	<form method="POST" action="/modifyok">
+    <table>
+    <tr><th colspan="5"><h2 style="text-align: center;"><span style="background-color: deepskyblue;">Modify Target</span></h2></th>
+
+    </tr><tr>
+
+        <td><label>Target:</label></td>
+            <td><input type="text" name="Target" value="{{ Target[1] }}"></td>
+        <td><label>Common Name:</label></td>
+            <td><input type="text" name="CommonName" value="{{ Target[2] }}"></td>
+
+    </tr><tr>
+
+        <td><label>Exposure Type:</label></td>
+            <td><select name='ImageType' id='ImageType'>
+            <option value="{{ Target[3] }}" selected disabled hidden>{{ Target[3] }}</option>
+            {% for item in ExpType %}
+			<option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+            </select></td>
+		<td><label>Session ID:</label></td>
+            <td><input type="text" name="SessionID" value="{{ Target[4] }}"></td>
+
+        </tr><tr>
+
+            <td><label>Date:</label></td>
+                <td><input type="text" name="Date" value="{{ Target[5] }}"></td>
+            <td><label>Num Images:</label></td>
+            <td><input type="text" name="NumImages" value="{{ Target[7] }}"></td>
+
+        </tr><tr>
+
+            <td><label>Duration:</label></td>
+                <td><input type="text" name="Duration" value="{{ Target[8] }}"></td>
+            <td><label>Gain:</label></td>
+                <td><input type="text" name="Gain" value="{{ Target[9] }}"></td>
+
+        </tr><tr>
+
+        <td><label>Cam Offset:</label></td>
+            <td><input type="text" name="CamOffset" value="{{ Target[10] }}"></td>
+        <td><label>Binning:</label></td>
+            <td><select name='Binning' id='Binning'>
+            <option value="{{ Target[11] }}" selected disabled hidden>{{ Target[11] }}</option>
+            {% for item in binningItems %}
+			<option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+            </select></td>
+        
+        </tr><tr>
+
+            <td><label>Cam Temp:</label></td>
+                <td><input type="text" name="CamTemp" value="{{ Target[12] }}"></td>
+
+        </table><br>
+        
+        <label>Weather:</label><br>
+			<textarea class="weather-box" id="Weather" name="Weather">{{ Target[6] }}</textarea><br>
+        <label>Notes:</label><br>
+			<textarea id="Notes" name="Notes" rows="5" cols="50" >{{ Target[13] }}</textarea><br>
+        <label>PostProc:</label><br>
+			<textarea id="PostProc" name="PostProc" rows="5" cols="50">{{ Target[14] }}</textarea><br>
+
+        <input type="submit" name="action" value="Modify Target">
+        <input type="submit" name="action" value="Cancel" formnovalidate>
+        <input type="hidden" name="ID" value= "{{ ID }}">
+    </form>   
+
+
+</body>
+</html>
+

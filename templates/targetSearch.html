@@ -1,0 +1,57 @@
+<html lang="en">
+<head>
+    <meta cahrset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="/static/favicon.ico">
+    <title>Target</title>
+</head>
+<body>
+    
+    <div>
+    <table>
+    <tr><th colspan="6"><h2 style="text-align: center;"><span style="background-color: deepskyblue;">KOBS Target</span></h2></th></tr>
+    <th> </th>
+	<th>Target</th>
+	<th>Common Name</th>
+	<th>Image Type</th>
+	<th>Session ID</th>
+	<th>Date</th>
+	<th>Number Images</th>
+	<th>Duration</th>
+	<th>Gain</th>
+    </tr>
+    
+    {% for row in Target %}
+    <tr>
+        <td><form method='Post' action="/details">
+            <button type="submit">Details</button>
+            <input type="hidden" id="ID" name="ID" value="{{ row[0] }}">
+        </form></td>
+	<td>{{ row[1] }}</td>
+	<td>{{ row[2] }}</td>
+	<td>{{ row[3] }}</td>
+	<td style="text-align: center;">{{ row[4] }}</td>
+	<!-- <td style="max-width: 45ch;"><div class="truncate-text">{{ row[4] }}</div></td> -->
+	<td>{{ row[5] }}</td>
+	<td>{{ row[7] }}</td>
+	<td>{{ row[8] }}</td>
+	<td>{{ row[9] }}</td>
+    </tr>
+    {% endfor %}
+    
+    </table>
+    </div>
+
+    <div>
+    <table style="td-small;"><tr>
+    <form method="POST" action="/refresh">
+        <td><input type="submit" name="action" value="Back"></td>
+    </form>
+    </tr></table>
+    </div>
+
+</body>
+</html>
+
