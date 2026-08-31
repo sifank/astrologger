@@ -1,0 +1,149 @@
+body {
+	margin: 2em;
+        background-image: url(/static/WestVeil.png);
+        background-repeat: no-repeat;
+	height: 100vh;
+	background-position: center;
+	background-repeat: no-repeat;
+        background-size: cover; */
+        /* background-color: lightgrey; */
+}
+table {
+        margin:2em;
+        border-collapse: collapse;
+        margin-bottom: 1;
+        background-color: skyblue;
+        margin-left: 0;
+}
+th, td {
+        padding: 3px;   /* can also do padding-right: x.xem */
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        width: 33.33%; /* Optional: Ensure consistent column widths */
+        box-sizing: border-box; /* Include padding/border in width calculation */
+        border: 1px solid #333;
+        /* background-color: lightblue; */
+}
+tr:nth-child(even) {
+        background-color: powderblue;
+}
+thead th {
+    /* Ensures the header cells align correctly with tbody cells' fixed width */
+    width: 33.33%; 
+}
+thread {
+        position: sticky;
+        top: 0;
+        background-color:#f2f2f2;
+}
+tbody {
+        display: block;
+        max-height: 30em;
+        overflow-y: auto;
+        overflow-x: auto;
+        border: 1px solid #333;
+}
+textarea {
+        height: 5lh;
+        width: 50ch;
+        border: 2px solid #333;
+        margin-top: 0; /* Ensures no extra margin from the textarea itself */
+        margin-left: 0;
+        word-wrap: break-word; 
+        background-color: powderblue;
+}
+label {
+        background-color: skyblue;
+}
+  
+/*--------------------------------------------*/
+.weather-box {
+        height: 2lh;
+        width: 120ch;
+        padding: 3px; /* was 3 */
+        border: 2px solid #333;
+        margin: 10px; /* Ensures no extra margin from the textarea itself */
+        margin-top: 0;
+        margin-bottom: 5;
+        word-wrap: break-word; 
+}
+.text-box {
+    width: 50ch;
+    height: 5lh;
+    padding: 3px;  /* was 15 */
+    border: 2px solid #333;
+    margin: 10px;  /* was 20 */
+    margin-top: 0;
+    margin-bottom: 5;
+    word-wrap: break-word; /* Ensures text breaks onto new lines if it's too long */
+  }
+.styled-textarea {
+    width: 100%; /* Makes the textarea responsive */
+    height: 150px; /* Sets the initial height */
+    padding: 10px; /* Adds space inside the border */
+    font-size: 16px; /* Increases text size */
+    border: 2px solid #ccc; /* Adds a visible border */
+    border-radius: 5px; /* Rounds the corners */
+    box-sizing: border-box; /* Ensures padding/border are included in the width */
+  }
+.table-container {
+        width: 100%;
+        overflow-x: auto;
+}
+.small-table {
+        overflow-y: auto;
+        overflow-x: auto;
+        background-color: lightblue;
+        padding: 1px;
+        text-align: left;   
+}
+.small-list {
+        display: block;
+        max-height: 200px;
+        background-color: lightblue;
+        overflow-y: auto;
+        overflow-x: auto;
+}
+.td-small {
+    padding: 0px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    /* Optional: Ensure consistent column widths */
+    width: 33.33%; 
+    box-sizing: border-box; /* Include padding/border in width calculation */
+}
+.wide-slider {
+        width: 80%;
+        max-width: 800px;
+        display: block;
+        margin: 20px 0;
+}
+.reset {
+        all: unsset;
+}
+.truncate-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        /* The max-width property is applied to the parent td */
+}
+.no-space-after {
+    margin-bottom: 0;
+}
+.button {
+  display: inline-block;
+  padding: 5px 5px;
+  background-color: lightblue;
+  color: black;
+  text-align: center;
+  text-decoration: none; /* Remove default link underline */
+  border: none;
+  border-radius: 5px;
+  cursor: default;
+}
+.notr:nth-child(even) {
+        background-color: skyblue;
+}
+.noborder {
+	border: none;
+}
