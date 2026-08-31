@@ -1,0 +1,33 @@
+#!/usr/bin/python3
+# Name:     ephemeris
+# Author:   sifan
+# Version:  20251128
+# Desc:     Calculates todays ephemeris for the Sun and Moon
+
+import ephem
+from datetime import datetime, timezone
+
+ctime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+utime = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+
+print(f"Current local time: {ctime}")
+print(f"Current UTC time:   {utime}")
+
+ko = ephem.Observer()
+ko.lon = '-124.040438'
+ko.lat = '44.867813'
+ko.elevation = 16
+ko.epoch = '2026'
+ko.pressure = 0
+ko.horizon = '-12'
+#print(f"DIAG: ko.horicaon: {ko.horizon}")
+ko.date = ephem.now()
+
+moon = ephem.Moon(ko)
+sun = ephem.Sun(ko)  # nautical twilight
+print(f"Sun Nautical Evening: {ephem.localtime(ko.next_setting(sun, use_center=True)).ctime()}")
+print(f"Sun Nautical Morning: {ephem.localtime(ko.next_rising(sun, use_center=True)).ctime()}")
+print(f"Moon Rise{ephem.localtime(ko.next_rising(moon)).ctime()}")
+print(f"Moon Set: {ephem.localtime(ko.next_setting(moon)).ctime()}")
+print(f"Moon Percent: {moon.phase:.1f}")
+

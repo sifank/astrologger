@@ -1,0 +1,226 @@
+#!/usr/bin/python3
+# Program: weatherUpdateDB
+# Version: 20220106
+# Author:  Sifan Kahale
+# Desc:    Reads info from weather servers and updates mysql db on localhost
+#          Reconfigured for field operations
+# Usage:   nothing or -l to list and not update db
+
+import sys, os, subprocess, re
+import time, datetime
+import mysql.connector
+import urllib.request, json
+#import psutil, math, string
+
+kobsUtilPath = '/opt/KOBS'
+if kobsUtilPath not in sys.path:
+    sys.path.append(kobsUtilPath)
+
+import kobsUtil
+
+
+#----------------------------------------------------------
+# Configuration data 
+WSYS = "kobsallsky"
+FSYS = "fieldallsky"
+TSYS = "kobs"
+DSYS = "fielddome"
+
+CRDNLS   = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
+             "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
+
+# Main
+#--------------------------------------------------------------
+# Gather data from the observatory telescope control station
+#--------------------------------------------------------------
+
+kobsHr = 0
+kobsMin = 0
+kobsTemp = 0.0
+kobsHum = 0.0
+kobsDp = 0.0
+kobsDpDep = 0.0
+kobsPres = 0.0
+kobsLux = 0.0
+kobsSkyTemp = 0.0
+if (os.popen("ping -c 1 -w 1 %s > /dev/null 2>&1; echo $?" % TSYS).readline().rstrip() == '0'):
+  try:
+    [kobsHr, kobsMin, kobsTemp, kobsHum, kobsDp, kobsDpDep, kobsPres, kobsLux, kobsSkyTemp] = os.popen("ssh %s '/opt/KOBS/envStatus -l' 2> /dev/null" % TSYS).readline().rstrip().split(":")
+    kobsDpDep = '{:5.1f}'.format(float(kobsTemp) - float(kobsDp))
+  except:
+    if((len(sys.argv) == 2) and sys.argv[1] == "-l"):
+        print("Problem with telescope")
+    
+#--------------------------------------------------------------
+# (Not using) Gather data from the dome control station
+#--------------------------------------------------------------
+domeHr = 0
+domeMin = 0
+domeTemp = 0.0
+domeHum = 0.0
+domeDp = 0.0
+domeDpDep = 0.0
+domePres = 0.0
+domePME10 = 0
+domePME25 = 0
+domePME100 = 0
+domePM3 = 0
+domePM5 = 0
+domePM10 = 0
+domePM25 = 0
+domePM50 = 0
+domePM100 = 0
+domeIsRain = "N"
+if (os.popen("ping -c 1 -w 1 %s > /dev/null 2>&1; echo $?" % DSYS).readline().rstrip() == '0'):
+  try:
+      [domeHr, domeMin, domeTemp, domeHum, domeDp, domePres, domePME10, domePME25, domePME100, domePM3, domePM5, domePM10, domePM25, domePM50, domePM100, domeIsRain] = os.popen("ssh %s '/opt/KOBS/envStatus -l' 2> /dev/null" % DSYS).readline().rstrip().split(":")
+      domeDpDep = '{:5.1f}'.format(float(domeTemp) - float(domeDp))
+  except:
+    if((len(sys.argv) == 2) and sys.argv[1] == "-l"):
+        print("Problem with dome")
+
+#----------------------------------------------------------
+# (Not using) Gather data from the allsky station
+#----------------------------------------------------------
+allskyHr = 0
+allskyMin = 0
+allskyTemp = 0.0
+allskyHum = 0.0
+allskyDp = 0.0
+allskyDpDep = 0.0
+allskyPres = 0.0
+allskyLux = 0.0
+allskySkyTemp = 0.0
+allskyWSpeed = 0.0
+allskyWGust = 0.0
+allskyWDir = 0.0
+allskyRain = 0.0
+
+#----------------------------------------------------------
+# (Not using) Weather Data From SmartWeather
+# See:  https://weatherflow.github.io/Tempest/api/
+#----------------------------------------------------------
+
+wfTemp    = 0.0
+wfHum     = 0.0
+wfDp      = 0.0
+wfPres    = 0.0
+wfDpDep   = 0.0
+wfWndDir  = 0.0
+wfWndSpd  = 0.0
+wfWndGst  = 0.0
+wfWndCrd = 'N'
+wfRain    = 0.0
+wfRain1h  = 0.0
+wfRain24h = 0.0
+wfLgtng   = 0.0
+wfIsRain = 'N'
+
+#----------------------------------------------------------
+# Gather data from the field allsky station
+#----------------------------------------------------------
+fallskyHr = 0
+fallskyMin = 0
+fallskyTemp = 0.0
+fallskyHum = 0.0
+fallskyDp = 0.0
+fallskyDpDep = 0.0
+fallskyPres = 0.0
+fallskyLux = 0.0
+fallskySkyTemp = 0.0
+fallskyWSpeed= 0 
+fallskyWGust= 0 
+fallskyWDir= 0 
+if (os.popen("ping -c 1 -w 1 %s > /dev/null 2>&1; echo $?" % FSYS).readline().rstrip() == '0'):
+  try:
+    [fallskyHr, fallskyMin, fallskyTemp, fallskyHum, fallskyDp, fallskyDpDep, fallskyPres, fallskyLux, fallskySkyTemp, fallskyWSpeed, fallskyWGust, fallskyWDir, fallskyRain] = os.popen("ssh %s '/opt/KOBS/envStatus -l' 2> /dev/null" % FSYS).readline().rstrip().split(":")
+  except:
+    if((len(sys.argv) == 2) and sys.argv[1] == "-l"):
+        print("Problem with field allskycam")
+
+#----------------------------------------------------------
+# set time vars
+#----------------------------------------------------------
+TimeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+abvTimeString = datetime.datetime.now().strftime("%H:%M ")
+
+#----------------------------------------------------------
+# Output data
+# insert to database if arg = '-i'
+#----------------------------------------------------------
+
+# if not -l then write it to the db
+if((len(sys.argv) == 2) and sys.argv[1] == "-i"):
+  sqlQuery = "INSERT INTO sensordata SET  \
+  time='%s', \
+  otaTemp='%s', \
+  otaHum='%s', \
+  otaDp='%s', \
+  otaPres='%s', \
+  otaLux='%s', \
+  otaSkyTemp='%s', \
+  allskyTemp='%s', \
+  allskyHum='%s', \
+  allskyDp='%s', \
+  allskyPres='%s', \
+  allskyLux='%s', \
+  allskySkyTemp='%s', \
+  allskyWind='%s', \
+  allskyWGust='%s', \
+  allskyWDir='%s', \
+  fallskyTemp='%s', \
+  fallskyHum='%s', \
+  fallskyDp='%s', \
+  fallskyPres='%s', \
+  fallskyLux='%s', \
+  fallskySkyTemp='%s', \
+  fallskyWind='%s', \
+  fallskyWGust='%s', \
+  fallskyWDir='%s', \
+  obsTemp='%s', \
+  obsHum='%s', \
+  obsDp='%s', \
+  obsPres='%s', \
+  obsWind='%s', \
+  obsGust='%s', \
+  obsWDir='%s', \
+  obsIsRain='%s', \
+  obsRain='%s', \
+  obsRain1Hr='%s', \
+  obsRain24Hr='%s', \
+  obsLgtng='%s', \
+  domeTemp='%s', \
+  domeHum='%s', \
+  domeDp='%s', \
+  domePres='%s', \
+  domeIsRain='%s', \
+  domePME10='%s', \
+  domePME25='%s', \
+  domePME100='%s', \
+  domePM3='%s', \
+  domePM5='%s', \
+  domePM10='%s', \
+  domePM25='%s', \
+  domePM50='%s', \
+  domePM100='%s'" \
+  %  \
+  (TimeString, kobsTemp, kobsHum, kobsDp, kobsPres, kobsLux, kobsSkyTemp, \
+   allskyTemp, allskyHum, allskyDp, allskyPres, allskyLux, allskySkyTemp, allskyWSpeed, allskyWGust, allskyWDir, \
+   fallskyTemp, fallskyHum, fallskyDp, fallskyPres, fallskyLux, fallskySkyTemp, fallskyWSpeed, fallskyWGust, fallskyWDir, \
+   wfTemp, wfHum, wfDp, wfPres, wfWndSpd, wfWndGst, wfWndDir, wfIsRain, wfRain, wfRain1h, wfRain24h, wfLgtng, \
+   domeTemp, domeHum, domeDp, domePres, domeIsRain, domePME10, domePME25, domePME100, domePM3, domePM5, domePM10, domePM25, domePM50, domePM100)
+  
+  #print(f"Sqlquery: \n{sqlQuery}")
+  try:
+    kobsUtil.mysqlCmd(sqlQuery)
+  except Exception as err:
+    print(err)
+
+#----------------------------------------------------------
+# otherwise print it out
+#----------------------------------------------------------
+else:
+    print("                  :   %s  %s    %s  %s %s    %s          %s" % ("Temp", "Hum", "DP", "DpDep", "Pres", "SkyLux", "SkyTemp"))
+    print("Field AllSky: %s:%s %s %s %s %s %s %s %s" % (fallskyHr, fallskyMin, fallskyTemp, fallskyHum, fallskyDp, fallskyDpDep, fallskyPres, fallskyLux, fallskySkyTemp))
+    print("OTA         : %s:%s %s %s %s %s %s %s %s" % (kobsHr, kobsMin, kobsTemp, kobsHum, kobsDp, kobsDpDep, kobsPres, kobsLux, kobsSkyTemp))
+
