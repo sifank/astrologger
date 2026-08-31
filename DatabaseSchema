@@ -1,0 +1,44 @@
+obsSession:
+CREATE TABLE `obsSession` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `Date` varchar(20) DEFAULT NULL,
+  `dtDate` datetime DEFAULT NULL,
+  `locName` varchar(40) DEFAULT NULL,
+  `locLong` double DEFAULT NULL,
+  `locLat` double DEFAULT NULL,
+  `locHeight` double DEFAULT NULL,
+  `Objective` varchar(300) DEFAULT NULL,
+  `Notes` varchar(300) DEFAULT NULL,
+  `OTA` varchar(20) DEFAULT NULL,
+  `Reducer` varchar(20) DEFAULT NULL,
+  `Mount` varchar(20) DEFAULT NULL,
+  `Controller` varchar(20) DEFAULT NULL,
+  `Focuser` varchar(20) DEFAULT NULL,
+  `Rotator` varchar(20) DEFAULT NULL,
+  `Guider` varchar(25) DEFAULT NULL,
+  `Filter` varchar(20) DEFAULT NULL,
+  `Camera` varchar(25) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `Date` (`Date`)
+) ENGINE=InnoDB
+
+obsTarget:
+CREATE TABLE `obsTarget` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `Target` varchar(40) DEFAULT NULL,
+  `CommonName` varchar(50) DEFAULT NULL,
+  `ImageType` varchar(20) DEFAULT NULL,
+  `SessionID` varchar(20) DEFAULT NULL,
+  `Date` datetime DEFAULT NULL,
+  `Weather` varchar(160) DEFAULT NULL,
+  `NumImages` varchar(10) DEFAULT NULL,
+  `Duration` varchar(10) DEFAULT NULL,
+  `Gain` varchar(10) DEFAULT NULL,
+  `CamOffset` varchar(10) DEFAULT NULL,
+  `Binning` varchar(10) DEFAULT NULL,
+  `CamTemp` varchar(10) DEFAULT NULL,
+  `Notes` varchar(300) DEFAULT NULL,
+  `PostProc` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB
+
